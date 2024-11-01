@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arrastra y Gana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nerko+One&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="estilo/styles.css">
+      <style>
+        body{
+            background-image:url("luciano lol/cel.jpg"); 
+        }
+        </style>
+</head>
+<body>
+    <header>
+        <h1>Arrastra a tu Jugador Favorito</h1>
+    </header>
+
+    <section class="game-container">
+        <div class="player-container">
+            <img src="imagenes/cr7.jpg" alt="Cristiano Ronaldo" draggable="true" ondragstart="drag(event)" id="cristiano">
+            <img src="imagenes/messi.jpg" alt="Lionel Messi" draggable="true" ondragstart="drag(event)" id="messi">
+            <img src="imagenes/neymar.jpg" alt="Neymar Jr." draggable="true" ondragstart="drag(event)" id="neymar">
+        </div>
+
+        <div class="drop-container">
+            <div class="figura">
+                <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Messi</h2>
+            </div>
+            <div class="figura">
+                <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Cristiano Ronaldo</h2>
+            </div>
+            <div class="figura">
+                <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Neymar</h2>
+            </div>
+        </div>
+    </section>
+    <div id="mensaje-exito" class="mensaje"></div>
+    <footer>
+    	 <button onclick="location.reload()">Reiniciar</button>
+        <a href="medio.html" class="mi-enlace">Nivel Medio</a>
+        <a href="dificil.html" class="mi-enlace">Nivel Difícil</a>
+    </footer>
+
+    <script src="java/java.js"></script>
+</body>
+</html>

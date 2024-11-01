@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arrastra y gana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nerko+One&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="estilo/dificil.css">
+</head>
+<body>
+    <header>
+        <h1>Arrastra a tu Jugador Favorito</h1>
+    </header>
+
+    <section class="game-container">
+        <div class="player-container">
+            <img src="imagenes/balloteli.jpeg" alt="Balotelli" draggable="true" ondragstart="drag(event)" id="Balotelli">
+            <img src="imagenes/summer.jpeg" alt="Sommer" draggable="true" ondragstart="drag(event)" id="Sommer">
+            <img src="imagenes/lahm.jpg" alt="Lahm" draggable="true" ondragstart="drag(event)" id="P.Lahm">
+        </div>
+
+        <div class="drop-container">
+            <div class="figura">
+                <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Sommer</h2>
+            </div>
+            <div class="figura">
+                <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Balotelli</h2>
+            </div>
+            <div class="figura">
+                <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>P.Lahm</h2>
+            </div>
+        </div>
+    </section>
+    <div id="mensaje-exito" class="mensaje"></div>
+    <footer>
+        <button onclick="location.reload()">Reiniciar</button>
+        <a href="medio.html" class="mi-enlace">Nivel Medio</a>
+        <a href="index.html" class="mi-enlace">Nivel Fácil</a>
+    </footer>
+
+    <script src="java/dificil.js"></script>
+</body>
+</html>

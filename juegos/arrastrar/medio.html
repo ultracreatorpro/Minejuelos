@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arrastra y Gana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nerko+One&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="estilo/medio.css">
+</head>
+<body>
+    <header>
+        <h1>Arrastra a tu Jugador Favorito</h1>
+    </header>
+
+    <section class="game-container">
+        <div class="player-container">
+            <img src="imagenes/maguire.jpeg" alt="Maguire" draggable="true" ondragstart="drag(event)" id="Maguire">
+            <img src="imagenes/reus.jpeg" alt="Reus" draggable="true" ondragstart="drag(event)" id="Reus">
+            <img src="imagenes/tagliafico.jpeg" alt="Tagliafico" draggable="true" ondragstart="drag(event)" id="Tagliafico">
+        </div>
+
+        <div class="drop-container">
+            <div class="figura">
+                <div class="box" id="0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Tagliafico</h2>
+            </div>
+            <div class="figura">
+                <div class="box" id="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Reus</h2>
+            </div>
+            <div class="figura">
+                <div class="box" id="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <h2>Maguire</h2>
+            </div>
+        </div>
+    </section>
+    <div id="mensaje-exito" class="mensaje"></div>
+    <footer>
+        <button onclick="location.reload()">Reiniciar</button>
+        <a href="index.html" class="mi-enlace">Nivel Fácil</a>
+        <a href="dificil.html" class="mi-enlace">Nivel Difícil</a>
+    </footer>
+
+    <script src="java/medio.js"></script>
+</body>
+</html>

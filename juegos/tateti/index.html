@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Tateti</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f06, #8e44ad);
+            color: white;
+        }
+
+        #contenedor-juego {
+            display: flex;
+            align-items: center;
+        }
+
+        #tablero-juego {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #tablero {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            grid-gap: 10px;
+            margin: 0 20px;
+        }
+
+        #jugador1Tablero, #jugador2Tablero {
+            width: 150px;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            font-size: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .activo {
+            transform: scale(1.1);
+        }
+
+        .celda {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 2px solid #34495e;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+            border-radius: 5px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .celda:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .celda.x {
+            color: #FADADD; /* Color para la X actualizado */
+            background-color: rgba(255, 182, 193, 0.5);
+ /* Fondo para la X */
+        }
+
+        .celda.o {
+            color: purple; /* Color para la O actualizado */
+          background-color: rgba(180, 130, 180, 0.5);
+
+
+ /* Fondo para la O */
+        }
+
+        #mensaje {
+            margin-top: 20px;
+            font-size: 24px;
+            color: white; /* Color del mensaje */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: darkred; /* Color del botón */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #e55b53;
+        }
+
+        button:active {
+            background-color: #c44a45;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 18px;
+            margin: 10px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+   </style>
+</head>
+<body>
+    <div id="bienvenida">
+        <h1>Bienvenidos al Tateti</h1>
+        <input type="text" id="jugador1" placeholder="Nombre del Jugador 1 (X)">
+        <input type="text" id="jugador2" placeholder="Nombre del Jugador 2 (O)">
+        <button onclick="iniciarJuego()">Iniciar Juego</button>
+    </div>
+
+    <div id="juego">
+        <div id="contenedor-juego">
+            <div id="jugador1Tablero" class="jugadorTablero"></div>
+            <div id="tablero-juego">
+                <h1 id="tituloJuego">Tateti</h1>
+                <div id="tablero">
+                    <div class="celda" onclick="hacerJugada(this, 0)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 1)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 2)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 3)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 4)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 5)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 6)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 7)"></div>
+                    <div class="celda" onclick="hacerJugada(this, 8)"></div>
+                </div>
+                <div id="mensaje" class="oculto"></div>
+                <button onclick="reiniciarJuego()">Reiniciar Juego</button>
+                <button onclick="salirJuego()">Salir</button>
+            </div>
+            <div id="jugador2Tablero" class="jugadorTablero"></div>
+        </div>
+    </div>
+
+    <script>
+        let turno = 'X';
+        let tablero = ['', '', '', '', '', '', '', '', ''];
+        let juegoTerminado = false;
+        let jugador1 = '';
+        let jugador2 = '';
+
+        const combinacionesGanadoras = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function iniciarJuego() {
+            jugador1 = document.getElementById('jugador1').value || 'Jugador 1';
+            jugador2 = document.getElementById('jugador2').value || 'Jugador 2';
+            document.getElementById('tituloJuego').textContent = `${jugador1} (X) vs ${jugador2} (O)`;
+            document.getElementById('jugador1Tablero').textContent = jugador1 + ' (X)';
+            document.getElementById('jugador2Tablero').textContent = jugador2 + ' (O)';
+            actualizarTurno();
+            document.getElementById('bienvenida').style.display = 'none';
+            document.getElementById('juego').style.display = 'block';
+        }
+
+        function hacerJugada(celda, index) {
+            if (tablero[index] === '' && !juegoTerminado) {
+                tablero[index] = turno;
+                celda.textContent = turno;
+                celda.classList.add(turno.toLowerCase());
+
+                if (verificarGanador()) {
+                    const ganador = turno === 'X' ? jugador1 : jugador2;
+                    document.getElementById('mensaje').textContent = `¡${ganador} ha ganado!`;
+                    document.getElementById('mensaje').classList.remove('oculto');
+                    juegoTerminado = true;
+                } else if (tablero.indexOf('') === -1) {
+                    document.getElementById('mensaje').textContent = "¡Es un empate!";
+                    document.getElementById('mensaje').classList.remove('oculto');
+                    juegoTerminado = true;
+                }
+                turno = turno === 'X' ? 'O' : 'X';
+                actualizarTurno();
+            }
+        }
+
+        function verificarGanador() {
+            for (const combinacion of combinacionesGanadoras) {
+                const [a, b, c] = combinacion;
+                if (tablero[a] && tablero[a] === tablero[b] && tablero[a] === tablero[c]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function reiniciarJuego() {
+            turno = 'X';
+            tablero = ['', '', '', '', '', '', '', '', ''];
+            juegoTerminado = false;
+            document.getElementById('mensaje').classList.add('oculto');
+            const celdas = document.getElementsByClassName('celda');
+            for (let i = 0; i < celdas.length; i++) {
+                celdas[i].textContent = '';
+                celdas[i].classList.remove('x', 'o');
+            }
+            actualizarTurno();
+        }
+
+        function salirJuego() {
+            // Reiniciar el juego
+            reiniciarJuego();
+
+            // Limpiar los nombres de los jugadores
+            document.getElementById('jugador1').value = '';
+            document.getElementById('jugador2').value = '';
+
+            // Mostrar la pantalla de bienvenida y ocultar el tablero de juego
+            document.getElementById('juego').style.display = 'none';
+            document.getElementById('bienvenida').style.display = 'block';
+        }
+
+        function actualizarTurno() {
+            const jugador1Elemento = document.getElementById('jugador1Tablero');
+            const jugador2Elemento = document.getElementById('jugador2Tablero');
+
+            if (turno === 'X') {
+                jugador1Elemento.classList.add('activo');
+                jugador2Elemento.classList.remove('activo');
+                jugador1Elemento.style.backgroundColor = "#ffb3b3"; // Color para el turno de X
+                jugador2Elemento.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
+            } else {
+                jugador1Elemento.classList.remove('activo');
+                jugador2Elemento.classList.add('activo');
+                jugador2Elemento.style.backgroundColor = "#d1b3ff"; // Color para el turno de O
+                jugador1Elemento.style.backgroundColor = "rgba(255, 255, 255, 0.2)";
+            }
+        }
+
+        // Mostrar la pantalla de bienvenida al cargar la página
+        document.getElementById('bienvenida').style.display = 'block';
+        document.getElementById('juego').style.display= 'none'
+    </script>
+</body>
+</html>
+
